@@ -30,7 +30,7 @@ export const planRouter = createTRPCRouter({
   update: publicProcedure
     .input(
       z.object({
-        id: z.number().optional(),
+        id: z.number(),
         meal_id: z.number().optional(),
         serves: z.number().optional(),
         name: z.string().optional(),
@@ -41,9 +41,7 @@ export const planRouter = createTRPCRouter({
       })
     )
     .mutation(({ ctx, input }) => {
-      if (input.id === undefined) {
-        return Promise.reject("id is required");
-      } else if (
+      if (
         input.serves !== undefined &&
         (isNaN(input.serves) || input.serves < 0)
       ) {

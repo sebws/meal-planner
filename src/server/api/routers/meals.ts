@@ -3,14 +3,36 @@ import { protectedProcedure, createTRPCRouter } from "../trpc";
 
 export const mealsRouter = createTRPCRouter({
   get: protectedProcedure
-    .input(z.object({ q: z.string() }))
-    .query(({ ctx, input: { q } }) => {
-      return ctx.prisma.meal.findMany({
-        where: {
-          name: {
-            contains: q,
-          },
+    .input(
+      z
+        .object({
+          contains: z.string().optional(),
+          filterPlanned: z.boolean().optional(),
+        })
+        .optional()
+    )
+    .query(({ ctx, input }) => {
+      const { contains, filterPlanned } = input || {};
+
+      const containsCondition = {
+        name: {
+          contains,
         },
+      };
+
+      const filterPlannedCondition = {
+        plan: null,
+      };
+
+      return ctx.prisma.meal.findMany({
+        ...(contains || filterPlanned
+          ? {
+              where: {
+                ...(contains ? containsCondition : {}),
+                ...(filterPlanned ? filterPlannedCondition : {}),
+              },
+            }
+          : {}),
       });
     }),
   delete: protectedProcedure
