@@ -47,13 +47,15 @@ const ShoppingList = () => {
 interface IShoppingCategory {
   category: string;
   values: {
-    meals: { id: number; name: string }[];
-    ingredient_id: number;
-    category: string;
-    name: string;
-    unit_id: number;
-    unit: string;
+    id: number;
     qty: number;
+    name: string;
+    unit: string;
+    category: string;
+    meals: {
+      name: string;
+      id: number;
+    }[];
   }[];
 }
 
@@ -73,7 +75,7 @@ const ShoppingCategory: React.FC<IShoppingCategory> = ({
           {values.map((entry, _index) => (
             <Ingredient
               entry={entry}
-              key={`${entry.ingredient_id}-${entry.unit_id}`}
+              key={`${entry.id}-${entry.unit}`}
             />
           ))}
         </List>
@@ -84,16 +86,15 @@ const ShoppingCategory: React.FC<IShoppingCategory> = ({
 
 interface IIngredient {
   entry: {
-    meals: {
-      id: number;
-      name: string;
-    }[];
-    ingredient_id: number;
-    category: string;
-    name: string;
-    unit_id: number;
-    unit: string;
+    id: number;
     qty: number;
+    name: string;
+    unit: string;
+    category: string;
+    meals: {
+      name: string;
+      id: number;
+    }[];
   };
 }
 
