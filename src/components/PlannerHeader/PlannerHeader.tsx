@@ -1,15 +1,21 @@
 import { useLocalStorage } from "@mantine/hooks";
 import {
   ActionIcon,
+  Avatar,
   Burger,
   MediaQuery,
   useMantineTheme,
   type ColorScheme,
 } from "@mantine/core";
-import { IconSun, IconMoonStars } from "@tabler/icons-react";
+import {
+  IconSun,
+  IconMoonStars,
+  IconLockAccessOff,
+  IconLogin,
+} from "@tabler/icons-react";
 import { Button, Header, NavLink, Text } from "@mantine/core";
-import { IconMeat } from "@tabler/icons-react";
 import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 interface IPlannerHeader {
   opened: boolean;
@@ -22,8 +28,8 @@ export const PlannerHeader: React.FC<IPlannerHeader> = ({
 }) => {
   const theme = useMantineTheme();
   return (
-    <Header height="60" className="p-4 items-center">
-      <div className="flex h-full justify-between items-center">
+    <Header height="60" className="items-center p-4">
+      <div className="flex h-full items-center justify-between">
         <MediaQuery largerThan="sm" styles={{ display: "none" }}>
           <Burger
             opened={opened}
@@ -39,9 +45,32 @@ export const PlannerHeader: React.FC<IPlannerHeader> = ({
             </Text>
           </Link>
         </Button>
+        <SessionButton />
         <ColorSchemeToggle />
       </div>
     </Header>
+  );
+};
+
+const SessionButton: React.FC = () => {
+  const { data: session } = useSession();
+
+  return session ? (
+    <Avatar
+      src={session.user.image}
+      alt={session.user.name ?? ""}
+      onClick={() => {
+        signOut().catch(console.error);
+      }}
+    />
+  ) : (
+    <ActionIcon
+      onClick={() => {
+        signIn("discord").catch(console.error);
+      }}
+    >
+      <IconLogin />
+    </ActionIcon>
   );
 };
 

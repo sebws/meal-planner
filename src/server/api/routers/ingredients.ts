@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, createTRPCRouter } from "../trpc";
+import { publicProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const ingredientsRouter = createTRPCRouter({
   get: publicProcedure.query(({ ctx }) => {
@@ -30,7 +30,7 @@ export const ingredientsRouter = createTRPCRouter({
       },
     });
   }),
-  update: publicProcedure
+  update: protectedProcedure
     .input(
       z.object({
         id: z.number(),
@@ -49,7 +49,7 @@ export const ingredientsRouter = createTRPCRouter({
         },
       });
     }),
-  delete: publicProcedure
+  delete: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(({ ctx, input: { id } }) => {
       return ctx.prisma.ingredient.delete({

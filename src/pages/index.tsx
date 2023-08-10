@@ -13,6 +13,7 @@ import { api } from "~/utils/api";
 import { PlannerTimeline } from "~/components/PlannerTimeline/PlannerTimeline";
 import ShoppingList from "~/components/ShoppingList/ShoppingList";
 import { useMediaQuery } from "@mantine/hooks";
+import { useSession } from "next-auth/react";
 
 const Home: NextPage = () => {
   const utils = api.useContext();
@@ -24,7 +25,8 @@ const Home: NextPage = () => {
   }));
 
   const { data: plan } = api.plan.get.useQuery();
-  const update = api.plan.update.useMutation({
+  const update = api.plan.update.useMutation({onSettled: () => utils.plan.get.invalidate()});
+  const updatex = api.plan.update.useMutation({
     onSettled: () => {
       void utils.plan.get.invalidate();
       void utils.shopping.get.invalidate();
@@ -47,16 +49,18 @@ const Home: NextPage = () => {
   const theme = useMantineTheme();
   const sm = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
 
+  const {data: session} = useSession();
+
   return (
-    <Flex className="h-full overflow-auto" direction={{ base: "column", sm: "row" }}>
-      <Container fluid className="w-full md:w-1/3 overflow-visible">
+    <Flex
+      className="h-full overflow-auto"
+      direction={{ base: "column", sm: "row" }}
+    >
+      <Container fluid className="w-full overflow-visible md:w-1/3">
         <PlannerTimeline plan={plan} meals={meals} update={update} />
       </Container>
       <Divider orientation={sm ? "horizontal" : "vertical"} className="my-4" />
-      <Container
-        fluid
-        className="h-full sm:w-2/3 w-full mx-0"
-      >
+      <Container fluid className="mx-0 h-full w-full sm:w-2/3">
         <ShoppingList />
       </Container>
     </Flex>

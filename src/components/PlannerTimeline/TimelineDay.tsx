@@ -24,7 +24,9 @@ const TimelineDay: React.FC<ITimelineDay> = ({ meals, day, update, plan }) => {
           meals?.map(({ value, label }) => ({
             label,
             value: String(value),
-            disabled: !!plan.find((plan) => plan.meal_id == value && plan.meal.name !== "Takeaway"),
+            disabled: !!plan.find(
+              (plan) => plan.meal_id == value && plan.meal.name !== "Takeaway"
+            ),
           })) || []
         }
         searchable
@@ -34,7 +36,7 @@ const TimelineDay: React.FC<ITimelineDay> = ({ meals, day, update, plan }) => {
         }}
         styles={minimalInputStyle}
       />
-      <div className="flex items-center">
+      <div className="justify-content-between flex items-center">
         <Text className="mr-2" size={"sm"}>
           {numberToServings(day.serves)}
         </Text>

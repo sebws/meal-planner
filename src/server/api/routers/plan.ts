@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { type Meal } from "@prisma/client";
-import { publicProcedure, createTRPCRouter } from "../trpc";
+import { publicProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 export const planRouter = createTRPCRouter({
@@ -9,6 +9,9 @@ export const planRouter = createTRPCRouter({
       include: {
         meal: true,
       },
+      orderBy: {
+        id: "asc",
+      }
     });
   }),
   randomise: publicProcedure.mutation(async ({ ctx }) => {
@@ -27,7 +30,7 @@ export const planRouter = createTRPCRouter({
       })
     );
   }),
-  update: publicProcedure
+  update: protectedProcedure
     .input(
       z.object({
         id: z.number(),
@@ -55,14 +58,14 @@ export const planRouter = createTRPCRouter({
         });
       }
     }),
-  lock: publicProcedure.mutation(({ ctx }) => {
+  lock: protectedProcedure.mutation(({ ctx }) => {
     return ctx.prisma.plan.updateMany({
       data: {
         locked: true,
       },
     });
   }),
-  unlock: publicProcedure.mutation(({ ctx }) => {
+  unlock: protectedProcedure.mutation(({ ctx }) => {
     return ctx.prisma.plan.updateMany({
       data: {
         locked: false,

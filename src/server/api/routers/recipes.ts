@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { z } from "zod";
-import { publicProcedure, createTRPCRouter } from "../trpc";
+import { publicProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 
 const zodNewIngredientWithNewUnit = z.object({
   type: z.literal("11"),
@@ -66,7 +66,7 @@ export const recipesRouter = createTRPCRouter({
         },
       });
     }),
-  add: publicProcedure
+  add: protectedProcedure
     .input(
       z.object({
         meal: z.object({
