@@ -25,8 +25,7 @@ const Home: NextPage = () => {
   }));
 
   const { data: plan } = api.plan.get.useQuery();
-  const update = api.plan.update.useMutation({onSettled: () => utils.plan.get.invalidate()});
-  const updatex = api.plan.update.useMutation({
+  const update = api.plan.update.useMutation({
     onSettled: () => {
       void utils.plan.get.invalidate();
       void utils.shopping.get.invalidate();
