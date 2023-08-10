@@ -1,7 +1,18 @@
 import { type NextPage } from "next";
-import { Container, Timeline, Text, Button, Select, Flex } from "@mantine/core";
+import {
+  Container,
+  Timeline,
+  Text,
+  Button,
+  Select,
+  Flex,
+  Divider,
+  useMantineTheme,
+} from "@mantine/core";
 import { api } from "~/utils/api";
 import { PlannerTimeline } from "~/components/PlannerTimeline/PlannerTimeline";
+import ShoppingList from "~/components/ShoppingList/ShoppingList";
+import { useMediaQuery } from "@mantine/hooks";
 
 const Home: NextPage = () => {
   const utils = api.useContext();
@@ -14,7 +25,10 @@ const Home: NextPage = () => {
 
   const { data: plan } = api.plan.get.useQuery();
   const update = api.plan.update.useMutation({
-    onSettled: () => utils.plan.get.invalidate(),
+    onSettled: () => {
+      void utils.plan.get.invalidate();
+      void utils.shopping.get.invalidate();
+    },
     onMutate: async (data) => {
       await utils.plan.get.cancel();
       const prevData = utils.plan.get.getData();
@@ -30,12 +44,21 @@ const Home: NextPage = () => {
     },
   });
 
+  const theme = useMantineTheme();
+  const sm = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
+
   return (
-    <Flex>
-      <Container fluid className="mx-0 w-full">
+    <Flex className="h-full overflow-auto" direction={{ base: "column", sm: "row" }}>
+      <Container fluid className="w-full md:w-1/3 overflow-visible">
         <PlannerTimeline plan={plan} meals={meals} update={update} />
       </Container>
-      <Container bg={"blue"}>test</Container>
+      <Divider orientation={sm ? "horizontal" : "vertical"} className="my-4" />
+      <Container
+        fluid
+        className="h-full sm:w-2/3 w-full mx-0"
+      >
+        <ShoppingList />
+      </Container>
     </Flex>
   );
 };

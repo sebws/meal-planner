@@ -1,8 +1,13 @@
-import { Select, Text, Button } from "@mantine/core";
+import { Select, Text, Button, Card, Tooltip, Popover } from "@mantine/core";
 import { type Meal, type Plan } from "@prisma/client";
-import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconCurrentLocation,
+} from "@tabler/icons-react";
 import { type api } from "~/utils/api";
 import { numberToServings } from "~/utils/content";
+import { minimalInputStyle } from "~/utils/helper";
 
 interface ITimelineDay {
   meals: { label: string; value: number }[] | undefined;
@@ -19,7 +24,7 @@ const TimelineDay: React.FC<ITimelineDay> = ({ meals, day, update, plan }) => {
           meals?.map(({ value, label }) => ({
             label,
             value: String(value),
-            disabled: !!plan.find((plan) => plan.meal_id == value),
+            disabled: !!plan.find((plan) => plan.meal_id == value && plan.meal.name !== "Takeaway"),
           })) || []
         }
         searchable
@@ -27,48 +32,38 @@ const TimelineDay: React.FC<ITimelineDay> = ({ meals, day, update, plan }) => {
         onChange={(selection) => {
           update.mutate({ id: day.id, meal_id: Number(selection) });
         }}
-        styles={(theme) => ({
-          rightSection: {
-            display: "none",
-          },
-          input: {
-            padding: "0",
-            fontSize: theme.fontSizes.md,
-            backgroundColor: "transparent",
-            border: "none",
-            textUnderlineOffset: "0.4em",
-            "&:focus": {
-              textDecoration: "underline",
-              // backgroundColor: theme.colors.gray[2],
-            },
-          },
-          wrapper: {
-            padding: 0,
-            backgroundColor: "transparent",
-          },
-        })}
-      ></Select>
-      <div className="mt-1 flex items-center">
+        styles={minimalInputStyle}
+      />
+      <div className="flex items-center">
         <Text className="mr-2" size={"sm"}>
           {numberToServings(day.serves)}
         </Text>
         <Button
           onClick={() => update.mutate({ id: day.id, serves: day.serves - 1 })}
-          className="mr-2"
+          className="mr mt-0.5"
           compact
-          variant="default"
+          variant="light"
           color="dark"
         >
           <IconArrowDown size={10} />
         </Button>
         <Button
+          className="mt-0.5"
           onClick={() => update.mutate({ id: day.id, serves: day.serves + 1 })}
           compact
-          variant="default"
+          variant="light"
           color="dark"
         >
           <IconArrowUp size={10} />
         </Button>
+        <Popover>
+          <Popover.Target>
+            <IconCurrentLocation className="ml-2" size={12} />
+          </Popover.Target>
+          <Popover.Dropdown>
+            <Text>{day.meal.location}</Text>
+          </Popover.Dropdown>
+        </Popover>
       </div>
     </>
   );

@@ -5,20 +5,26 @@ import { SessionProvider } from "next-auth/react";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
-import { MantineProvider } from "@mantine/core";
+import { type ColorScheme, MantineProvider } from "@mantine/core";
 import Layout from "~/components/Layout";
+import { useLocalStorage } from "@mantine/hooks";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const [colorScheme] = useLocalStorage<ColorScheme>({
+    key: "color-scheme",
+    defaultValue: "light",
+  });
+
   return (
     <SessionProvider session={session}>
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
         theme={{
-          colorScheme: "light",
+          colorScheme,
         }}
       >
         <Layout>

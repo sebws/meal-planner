@@ -3,6 +3,7 @@ import { z } from "zod";
 import { publicProcedure, createTRPCRouter } from "../trpc";
 
 const zodNewIngredientWithNewUnit = z.object({
+  type: z.literal("11"),
   name: z.string(),
   unit: z.string(),
   qty: z.number(),
@@ -10,25 +11,28 @@ const zodNewIngredientWithNewUnit = z.object({
 });
 
 const zodNewIngredient = z.object({
+  type: z.literal("10"),
   name: z.string(),
-  unit_id: z.number(),
+  unit_id: z.coerce.number(),
   qty: z.number(),
   category: z.string(),
 });
 
 const zodExistingIngredientWithNewUnit = z.object({
-  ingredient_id: z.number(),
+  type: z.literal("01"),
+  ingredient_id: z.coerce.number(),
   unit: z.string(),
   qty: z.number(),
 });
 
 const zodExistingIngredient = z.object({
-  ingredient_id: z.number(),
-  unit_id: z.number(),
+  type: z.literal("00"),
+  ingredient_id: z.coerce.number(),
+  unit_id: z.coerce.number(),
   qty: z.number(),
 });
 
-const ingredientTypes = z.union([
+const ingredientTypes = z.discriminatedUnion("type", [
   zodNewIngredientWithNewUnit,
   zodNewIngredient,
   zodExistingIngredientWithNewUnit,
@@ -48,11 +52,12 @@ export const recipesRouter = createTRPCRouter({
   get: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input: { id } }) => {
-      return ctx.prisma.meal.findMany({
+      return ctx.prisma.meal.findFirst({
         include: {
           materials: {
             include: {
               ingredient: true,
+              unit: true,
             },
           },
         },
@@ -120,6 +125,20 @@ export const recipesRouter = createTRPCRouter({
         },
       });
     }),
+  // update: publicProcedure.input(z.object({
+  //   id: z.number(),
+  //   ingredients: z.array(ingredientTypes),
+  // })).mutation(({ ctx, input: { id, meal, ingredients } }) => {
+  //   return ctx.prisma.meal.update({
+  //     where: {
+  //       id,
+  //     },
+  //     data: {
+  //       ...meal,
+  //       materials: {
+
+  //   })
+  // }),
 });
 
 const isExisting = (

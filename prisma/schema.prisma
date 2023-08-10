@@ -4,8 +4,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Account {
@@ -67,14 +68,14 @@ model Meal {
   location  String
   servings  Int
   materials Material[]
-  plan      Plan?
+  plan      Plan[]
 
   @@map("Meals")
 }
 
 model Plan {
   id      Int     @id @default(autoincrement())
-  meal_id Int     @unique
+  meal_id Int
   serves  Int
   locked  Boolean
   meal    Meal    @relation(fields: [meal_id], references: [id], onDelete: Cascade)
@@ -85,10 +86,10 @@ model Material {
   meal_id       Int
   ingredient_id Int
   unit_id       Int
-  qty           Decimal
-  meal          Meal       @relation(fields: [meal_id], references: [id], onDelete: Cascade)
-  ingredient    Ingredient @relation(fields: [ingredient_id], references: [id], onDelete: Cascade)
+  qty           Float
   unit          Unit       @relation(fields: [unit_id], references: [id], onDelete: Cascade)
+  ingredient    Ingredient @relation(fields: [ingredient_id], references: [id], onDelete: Cascade)
+  meal          Meal       @relation(fields: [meal_id], references: [id], onDelete: Cascade)
 
   @@map("Materials")
 }
