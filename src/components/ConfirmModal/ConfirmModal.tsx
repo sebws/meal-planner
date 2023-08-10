@@ -4,12 +4,10 @@ import {
   Button,
   Modal,
   Text,
-  ThemeIcon,
 } from "@mantine/core";
 import {
   IconAlertCircle,
   IconArrowBack,
-  IconCheck,
   IconTrash,
 } from "@tabler/icons-react";
 
