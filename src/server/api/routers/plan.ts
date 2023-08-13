@@ -15,7 +15,7 @@ export const planRouter = createTRPCRouter({
     });
   }),
   randomise: publicProcedure.mutation(async ({ ctx }) => {
-    const meals = await ctx.prisma.$queryRaw<Meal[]>`select * from RandomMeals`;
+    const meals = await ctx.prisma.$queryRaw<Meal[]>`select * from "RandomMeals"`;
     return Promise.all(
       meals.map((m, id) => {
         return ctx.prisma.plan.updateMany({

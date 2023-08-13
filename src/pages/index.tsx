@@ -13,7 +13,6 @@ import { api } from "~/utils/api";
 import { PlannerTimeline } from "~/components/PlannerTimeline/PlannerTimeline";
 import ShoppingList from "~/components/ShoppingList/ShoppingList";
 import { useMediaQuery } from "@mantine/hooks";
-import { useSession } from "next-auth/react";
 
 const Home: NextPage = () => {
   const utils = api.useContext();
@@ -47,8 +46,6 @@ const Home: NextPage = () => {
 
   const theme = useMantineTheme();
   const sm = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
-
-  const {data: session} = useSession();
 
   return (
     <Flex
