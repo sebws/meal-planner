@@ -7,15 +7,37 @@ export const planRouter = createTRPCRouter({
   get: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.plan.findMany({
       include: {
-        meal: true,
+        meal: {
+          include: {
+            materials: {
+              select: {
+                qty: true,
+                ingredient: {
+                  select: {
+                    id: true,
+                    name: true,
+                    category: true,
+                  },
+                },
+                unit: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       orderBy: {
         id: "asc",
-      }
+      },
     });
   }),
   randomise: publicProcedure.mutation(async ({ ctx }) => {
-    const meals = await ctx.prisma.$queryRaw<Meal[]>`select * from "RandomMeals"`;
+    const meals = await ctx.prisma.$queryRaw<
+      Meal[]
+    >`select * from "RandomMeals"`;
     return Promise.all(
       meals.map((m, id) => {
         return ctx.prisma.plan.updateMany({

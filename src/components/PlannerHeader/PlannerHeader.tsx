@@ -13,18 +13,18 @@ import {
   IconLockAccessOff,
   IconLogin,
 } from "@tabler/icons-react";
-import { Button, Header, NavLink, Text } from "@mantine/core";
+import { Button, Header, Text } from "@mantine/core";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 interface IPlannerHeader {
-  opened: boolean;
-  setOpened: (func: (o: boolean) => boolean) => void;
+  isMenuOpen: boolean;
+  toggleMenuOpen: () => void;
 }
 
 export const PlannerHeader: React.FC<IPlannerHeader> = ({
-  opened,
-  setOpened,
+  isMenuOpen: opened,
+  toggleMenuOpen: toggleOpened,
 }) => {
   const theme = useMantineTheme();
   return (
@@ -33,7 +33,7 @@ export const PlannerHeader: React.FC<IPlannerHeader> = ({
         <MediaQuery largerThan="sm" styles={{ display: "none" }}>
           <Burger
             opened={opened}
-            onClick={() => setOpened((o) => !o)}
+            onClick={toggleOpened}
             size="sm"
             color={theme.colors.gray[6]}
           />

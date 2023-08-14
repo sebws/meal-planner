@@ -8,12 +8,13 @@ import {
   Button,
 } from "@mantine/core";
 import { useState } from "react";
-import { api } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
 import { groupBy } from "~/utils/helper";
 import CategoryIcon from "../CategoryIcon";
 
 const ShoppingList = () => {
-  const { data: shoppingData } = api.shopping.get.useQuery();
+  const { data: planData } = api.plan.get.useQuery();
+  const shoppingData = plansToShoppingList(planData || []);
   const shopping = shoppingData
     ? groupBy(shoppingData, (item) => item.category)
     : [];
@@ -126,5 +127,45 @@ const Ingredient: React.FC<IIngredient> = ({ entry }) => {
     </List.Item>
   );
 };
+
+const plansToShoppingList = (plans: RouterOutputs['plan']['get']) => Object.values(plans
+    .flatMap((plan) =>
+      plan.meal.materials.map((material) => ({
+        id: material.ingredient.id,
+        qty:  Math.round(material.qty * (plan.serves / plan.meal.servings) * 100) / 100,
+        name: material.ingredient.name,
+        unit: material.unit.name,
+        category: material.ingredient.category,
+        meals: [
+          {
+            name: plan.meal.name,
+            id: plan.meal.id,
+          },
+        ],
+      }))
+    )
+    .reduce(
+      (acc, value) => {
+        const key = `${value.id}${value.unit}`;
+        const val = acc[key];
+        if (val !== undefined) {
+          val.qty += value.qty;
+          val.meals = val.meals.concat(value.meals);
+        } else {
+          acc[key] = value;
+        }
+        return acc;
+      },
+      {} as {
+        [key: string]: {
+          id: number;
+          qty: number;
+          name: string;
+          unit: string;
+          category: string;
+          meals: { name: string; id: number }[];
+        };
+      }
+    ));
 
 export default ShoppingList;
