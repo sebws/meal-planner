@@ -14,13 +14,16 @@ export default class _Document extends Document {
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta
             name="apple-mobile-web-app-status-bar-style"
-            content="default"
+            content="black-translucent"
           />
           <meta name="apple-mobile-web-app-title" content="Meal Planner" />
-          <meta name="description" content="Weekly meal planner and shopping list creator" />
+          <meta
+            name="description"
+            content="Weekly meal planner and shopping list creator"
+          />
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="theme-color" content="#000000" />
+          <meta name="theme-color" content="#1a1b1e" />
 
           <link rel="manifest" href="/manifest.json" />
           <link rel="shortcut icon" href="/favicon.ico" />

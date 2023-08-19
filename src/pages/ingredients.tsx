@@ -42,7 +42,7 @@ const Ingredients: NextPage = () => {
           variant="outline"
           // onClick={open}
         >
-          Add meal
+          Add ingredient
         </Button>
       </Group>
       <Table horizontalSpacing="xs" className="w-fit table-fixed overflow-auto">
