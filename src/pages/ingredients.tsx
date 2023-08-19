@@ -33,9 +33,9 @@ const Ingredients: NextPage = () => {
       <Group>
         <TextInput
           className="w-full sm:w-auto"
-          label="Filter meals"
-          placeholder="Search by name or ingredient"
-          // onChange={(event) => setSearch(event.target.value)}
+          label="Filter ingredients"
+          placeholder="Search by name"
+          onChange={(event) => setSearch(event.target.value)}
         />
         <Button
           className="w-full self-end sm:w-auto"

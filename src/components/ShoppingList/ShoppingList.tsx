@@ -1,12 +1,4 @@
-import {
-  Text,
-  List,
-  Flex,
-  Collapse,
-  Tooltip,
-  ScrollArea,
-  Button,
-} from "@mantine/core";
+import { Text, List, Flex, Collapse, Tooltip } from "@mantine/core";
 import { useState } from "react";
 import { api, type RouterOutputs } from "~/utils/api";
 import { groupBy } from "~/utils/helper";
@@ -20,13 +12,12 @@ const ShoppingList = () => {
     : [];
 
   return (
-    // <ScrollArea className="h-full pl-5 pt-3" h="100vh" w="200%">
     <Flex
-      direction="column"
-      gap="sm"
+      direction="row"
+      gap="md"
       align="flex-start"
-      // wrap="wrap"
-      className="h-full flex-nowrap sm:flex-wrap"
+      wrap="nowrap"
+      className="h-full flex-wrap"
     >
       {Object.entries(shopping)
         .sort(
@@ -41,7 +32,6 @@ const ShoppingList = () => {
           />
         ))}
     </Flex>
-    // </ScrollArea>
   );
 };
 
@@ -74,10 +64,7 @@ const ShoppingCategory: React.FC<IShoppingCategory> = ({
       <Collapse in={opened}>
         <List>
           {values.map((entry, _index) => (
-            <Ingredient
-              entry={entry}
-              key={`${entry.id}-${entry.unit}`}
-            />
+            <Ingredient entry={entry} key={`${entry.id}-${entry.unit}`} />
           ))}
         </List>
       </Collapse>
@@ -116,9 +103,9 @@ const Ingredient: React.FC<IIngredient> = ({ entry }) => {
       >
         <Text
           size="sm"
-          className={`w-full ${struck ? "line-through" : ""} ${
-            struck ? "hover:no-underline" : "hover:line-through"
-          }`}
+          className={`w-full ${
+            struck ? "line-through" : ""
+          } hover:line-through`}
         >
           {entry.qty} {entry.unit}
           {entry.qty !== 1 && entry.unit.at(-1) !== "s" ? "s" : ""} {entry.name}
@@ -128,44 +115,50 @@ const Ingredient: React.FC<IIngredient> = ({ entry }) => {
   );
 };
 
-const plansToShoppingList = (plans: RouterOutputs['plan']['get']) => Object.values(plans
-    .flatMap((plan) =>
-      plan.meal.materials.map((material) => ({
-        id: material.ingredient.id,
-        qty:  Math.round(material.qty * (plan.serves / plan.meal.servings) * 100) / 100,
-        name: material.ingredient.name,
-        unit: material.unit.name,
-        category: material.ingredient.category,
-        meals: [
-          {
-            name: plan.meal.name,
-            id: plan.meal.id,
-          },
-        ],
-      }))
-    )
-    .reduce(
-      (acc, value) => {
-        const key = `${value.id}${value.unit}`;
-        const val = acc[key];
-        if (val !== undefined) {
-          val.qty += value.qty;
-          val.meals = val.meals.concat(value.meals);
-        } else {
-          acc[key] = value;
+const plansToShoppingList = (plans: RouterOutputs["plan"]["get"]) =>
+  Object.values(
+    plans
+      .flatMap((plan) =>
+        plan.meal.materials.map((material) => ({
+          id: material.ingredient.id,
+          qty:
+            Math.round(
+              material.qty * (plan.serves / plan.meal.servings) * 100
+            ) / 100,
+          name: material.ingredient.name,
+          unit: material.unit.name,
+          category: material.ingredient.category,
+          meals: [
+            {
+              name: plan.meal.name,
+              id: plan.meal.id,
+            },
+          ],
+        }))
+      )
+      .reduce(
+        (acc, value) => {
+          const key = `${value.id}${value.unit}`;
+          const val = acc[key];
+          if (val !== undefined) {
+            val.qty += value.qty;
+            val.meals = val.meals.concat(value.meals);
+          } else {
+            acc[key] = value;
+          }
+          return acc;
+        },
+        {} as {
+          [key: string]: {
+            id: number;
+            qty: number;
+            name: string;
+            unit: string;
+            category: string;
+            meals: { name: string; id: number }[];
+          };
         }
-        return acc;
-      },
-      {} as {
-        [key: string]: {
-          id: number;
-          qty: number;
-          name: string;
-          unit: string;
-          category: string;
-          meals: { name: string; id: number }[];
-        };
-      }
-    ));
+      )
+  );
 
 export default ShoppingList;

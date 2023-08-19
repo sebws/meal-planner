@@ -3,15 +3,21 @@
  * This is especially useful for Docker builds.
  */
 import path from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
+import WithPWA from "next-pwa";
 
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env.mjs"));
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const withPWA = WithPWA({
+  dest: "public",
+});
+
 /** @type {import("next").NextConfig} */
-const config = {
+const config = withPWA({
   reactStrictMode: true,
 
   /**
@@ -28,5 +34,6 @@ const config = {
     fiber: false,
     includePaths: [path.join(__dirname, "styles")],
   },
-};
+});
+
 export default config;

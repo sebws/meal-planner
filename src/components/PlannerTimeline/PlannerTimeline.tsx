@@ -2,21 +2,13 @@ import { type Meal, type Plan } from "@prisma/client";
 import { Timeline, Text, Stack, Button, Flex } from "@mantine/core";
 import { numberToDay } from "~/utils/content";
 import TimelineBullet from "./TimelineBullet";
-import { api } from "~/utils/api";
+import { api, RouterOutputs } from "~/utils/api";
 import TimelineDay from "./TimelineDay";
 import { IconArrowsShuffle, IconLock, IconLockOpen } from "@tabler/icons-react";
+import { Suspense } from "react";
+import ActualTimeline from "./ActualTimeline";
 
-interface IPlannerTimeline {
-  meals: { label: string; value: number }[] | undefined;
-  update: ReturnType<typeof api.plan.update.useMutation>;
-  plan: (Plan & { meal: Meal })[] | undefined;
-}
-
-export const PlannerTimeline: React.FC<IPlannerTimeline> = ({
-  plan,
-  update,
-  meals,
-}) => {
+export const PlannerTimeline: React.FC = () => {
   const utils = api.useContext();
 
   const lock = api.plan.lock.useMutation({
@@ -56,7 +48,6 @@ export const PlannerTimeline: React.FC<IPlannerTimeline> = ({
   const randomise = api.plan.randomise.useMutation({
     onSettled: () => {
       void utils.plan.get.invalidate();
-      void utils.shopping.get.invalidate();
     },
   });
 
@@ -77,21 +68,29 @@ export const PlannerTimeline: React.FC<IPlannerTimeline> = ({
           <IconArrowsShuffle size={17} color="gray" />
         </Button>
       </Flex>
-      <Timeline>
-        {plan?.map((day, index) => (
-          <Timeline.Item
-            key={day.id}
-            title={
-              <Text size={"xs"} color="blue">
-                {numberToDay(index)}
-              </Text>
-            }
-            bullet={<TimelineBullet day={day} update={update} />}
-          >
-            <TimelineDay meals={meals} day={day} update={update} plan={plan} />
-          </Timeline.Item>
-        ))}
-      </Timeline>
+      <Suspense
+        fallback={
+          <Timeline>
+            {[...Array(7).keys()].map((_, index) => (
+              <Timeline.Item
+                key={index}
+                title={
+                  <Text size={"xs"} color="blue">
+                    {numberToDay(index)}
+                  </Text>
+                }
+                bullet={
+                  <div className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-500">
+                    <div className="h-2 w-2 rounded-full bg-gray-200" />
+                  </div>
+                }
+              />
+            ))}
+          </Timeline>
+        }
+      >
+        <ActualTimeline />
+      </Suspense>
     </>
   );
 };

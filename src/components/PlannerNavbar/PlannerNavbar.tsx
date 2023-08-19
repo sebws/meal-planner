@@ -11,13 +11,13 @@ export const PlannerNavbar: React.FC<IPlannerNavbar> = ({ isMenuOpen, setMenuClo
   <Navbar width={{ md: 175, sm: 80 }} hiddenBreakpoint="sm" hidden={!isMenuOpen} className="p-4">
     <Navbar.Section>
       <Link href="/">
-        <NavLink onClick={() => setMenuClosed} label="Planner" icon={<IconCalendar />} />
+        <NavLink onClick={setMenuClosed} label="Planner" icon={<IconCalendar />} />
       </Link>
       <Link href="/meals">
-        <NavLink onClick={() => setMenuClosed} label="Meals" icon={<IconToolsKitchen2 />} />
+        <NavLink onClick={setMenuClosed} label="Meals" icon={<IconToolsKitchen2 />} />
       </Link>
       <Link href="/ingredients">
-        <NavLink onClick={() => setMenuClosed} label="Ingredients" icon={<IconMeat />} />
+        <NavLink onClick={setMenuClosed} label="Ingredients" icon={<IconMeat />} />
       </Link>
     </Navbar.Section>
   </Navbar>

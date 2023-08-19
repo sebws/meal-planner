@@ -36,13 +36,13 @@ const TimelineDay: React.FC<ITimelineDay> = ({ meals, day, update, plan }) => {
         }}
         styles={minimalInputStyle}
       />
-      <div className="justify-content-between flex items-center">
-        <Text className="mr-2" size={"sm"}>
+      <div className="grid grid-cols-6 items-center sm:w-3/4 md:w-auto">
+        <Text className="col-span-3" size={"sm"}>
           {numberToServings(day.serves)}
         </Text>
         <Button
           onClick={() => update.mutate({ id: day.id, serves: day.serves - 1 })}
-          className="mr mt-0.5"
+          className="mt-0.5 w-fit"
           compact
           variant="light"
           color="dark"
@@ -50,7 +50,7 @@ const TimelineDay: React.FC<ITimelineDay> = ({ meals, day, update, plan }) => {
           <IconArrowDown size={10} />
         </Button>
         <Button
-          className="mt-0.5"
+          className="mt-0.5 w-fit"
           onClick={() => update.mutate({ id: day.id, serves: day.serves + 1 })}
           compact
           variant="light"
@@ -60,7 +60,7 @@ const TimelineDay: React.FC<ITimelineDay> = ({ meals, day, update, plan }) => {
         </Button>
         <Popover>
           <Popover.Target>
-            <IconCurrentLocation className="ml-2" size={12} />
+            <IconCurrentLocation className="mx-4" size={12} />
           </Popover.Target>
           <Popover.Dropdown>
             <Text>{day.meal.location}</Text>

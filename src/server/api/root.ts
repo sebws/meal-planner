@@ -3,7 +3,6 @@ import { ingredientsRouter } from "./routers/ingredients";
 import { mealsRouter } from "./routers/meals";
 import { planRouter } from "./routers/plan";
 import { recipesRouter } from "./routers/recipes";
-import { shoppingRouter } from "./routers/shopping";
 import { dayRouter } from "./routers/day";
 import { unitsRouter } from "./routers/units";
 
@@ -18,7 +17,6 @@ export const appRouter = createTRPCRouter({
   ingredients: ingredientsRouter,
   meals: mealsRouter,
   recipes: recipesRouter,
-  shopping: shoppingRouter,
   units: unitsRouter,
 });
 

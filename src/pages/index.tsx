@@ -1,65 +1,18 @@
 import { type NextPage } from "next";
-import {
-  Container,
-  Timeline,
-  Text,
-  Button,
-  Select,
-  Flex,
-  Divider,
-  useMantineTheme,
-} from "@mantine/core";
-import { api } from "~/utils/api";
+import { Container } from "@mantine/core";
 import { PlannerTimeline } from "~/components/PlannerTimeline/PlannerTimeline";
 import ShoppingList from "~/components/ShoppingList/ShoppingList";
-import { useMediaQuery } from "@mantine/hooks";
 
 const Home: NextPage = () => {
-  const utils = api.useContext();
-
-  const { data: mealsData } = api.meals.get.useQuery();
-  const meals = mealsData?.map((meal) => ({
-    label: meal.name,
-    value: meal.id,
-  }));
-
-  const { data: plan } = api.plan.get.useQuery();
-  const update = api.plan.update.useMutation({
-    onSettled: () => {
-      void utils.plan.get.invalidate();
-      void utils.shopping.get.invalidate();
-    },
-    onMutate: async (data) => {
-      await utils.plan.get.cancel();
-      const prevData = utils.plan.get.getData();
-      utils.plan.get.setData(undefined, (old) =>
-        old !== undefined
-          ? old.map((day) => (day.id === data.id ? { ...day, ...data } : day))
-          : undefined
-      );
-      return { prevData };
-    },
-    onError: (_err, _data, ctx) => {
-      utils.plan.get.setData(undefined, ctx?.prevData);
-    },
-  });
-
-  const theme = useMantineTheme();
-  const sm = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
-
   return (
-    <Flex
-      className="h-full overflow-auto"
-      direction={{ base: "column", sm: "row" }}
-    >
-      <Container fluid className="w-full overflow-visible md:w-1/3">
-        <PlannerTimeline plan={plan} meals={meals} update={update} />
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <Container fluid className="w-full overflow-visible">
+        <PlannerTimeline />
       </Container>
-      <Divider orientation={sm ? "horizontal" : "vertical"} className="my-4" />
-      <Container fluid className="mx-0 h-full w-full sm:w-2/3">
+      <Container fluid className="ml-4 md:col-span-2">
         <ShoppingList />
       </Container>
-    </Flex>
+    </div>
   );
 };
 

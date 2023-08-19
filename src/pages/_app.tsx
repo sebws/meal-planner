@@ -1,3 +1,4 @@
+import React from 'react';
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -8,6 +9,7 @@ import "~/styles/globals.css";
 import { type ColorScheme, MantineProvider } from "@mantine/core";
 import Layout from "~/components/Layout";
 import { useLocalStorage } from "@mantine/hooks";
+import Head from "next/head";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -19,19 +21,27 @@ const MyApp: AppType<{ session: Session | null }> = ({
   });
 
   return (
-    <SessionProvider session={session}>
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          colorScheme,
-        }}
-      >
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </MantineProvider>
-    </SessionProvider>
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+        />
+      </Head>
+      <SessionProvider session={session}>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            colorScheme,
+          }}
+        >
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </MantineProvider>
+      </SessionProvider>
+    </>
   );
 };
 

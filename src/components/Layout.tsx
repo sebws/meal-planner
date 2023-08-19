@@ -9,6 +9,11 @@ const Layout = ({ children }: { children: ReactElement }) => {
   const [isMenuOpen, { close: setMenuClosed, toggle: toggleMenuOpen }] =
     useDisclosure(false);
 
+  const closer = () => {
+    console.log('closing');
+    setMenuClosed();
+  }
+
   return (
     <>
       <Head>
@@ -20,7 +25,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
         navbar={
           <PlannerNavbar
             isMenuOpen={isMenuOpen}
-            setMenuClosed={setMenuClosed}
+            setMenuClosed={closer}
           />
         }
         navbarOffsetBreakpoint="sm"

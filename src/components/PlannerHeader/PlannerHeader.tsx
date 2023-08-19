@@ -10,8 +10,8 @@ import {
 import {
   IconSun,
   IconMoonStars,
-  IconLockAccessOff,
   IconLogin,
+  IconRobot,
 } from "@tabler/icons-react";
 import { Button, Header, Text } from "@mantine/core";
 import Link from "next/link";
@@ -45,8 +45,10 @@ export const PlannerHeader: React.FC<IPlannerHeader> = ({
             </Text>
           </Link>
         </Button>
-        <SessionButton />
-        <ColorSchemeToggle />
+        <div className="flex items-center gap-4">
+          <SessionButton />
+          <ColorSchemeToggle />
+        </div>
       </div>
     </Header>
   );
@@ -62,7 +64,9 @@ const SessionButton: React.FC = () => {
       onClick={() => {
         signOut().catch(console.error);
       }}
-    />
+    >
+      <IconRobot />
+    </Avatar>
   ) : (
     <ActionIcon
       onClick={() => {
