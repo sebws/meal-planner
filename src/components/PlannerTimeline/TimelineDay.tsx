@@ -8,6 +8,7 @@ import {
 import { type api } from "~/utils/api";
 import { numberToServings } from "~/utils/content";
 import { minimalInputStyle } from "~/utils/helper";
+import LinkOrText from "../LinkOrText";
 
 interface ITimelineDay {
   meals: { label: string; value: number }[] | undefined;
@@ -63,7 +64,7 @@ const TimelineDay: React.FC<ITimelineDay> = ({ meals, day, update, plan }) => {
             <IconCurrentLocation className="mx-4" size={12} />
           </Popover.Target>
           <Popover.Dropdown>
-            <Text>{day.meal.location}</Text>
+            <LinkOrText text={day.meal.location} />
           </Popover.Dropdown>
         </Popover>
       </div>
