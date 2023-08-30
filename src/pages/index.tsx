@@ -6,7 +6,7 @@ import ShoppingList from "~/components/ShoppingList/ShoppingList";
 const Home: NextPage = () => {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-      <Container fluid className="w-full overflow-visible">
+      <Container fluid className="overflow-visible">
         <PlannerTimeline />
       </Container>
       <Container fluid className="ml-4 md:col-span-2">

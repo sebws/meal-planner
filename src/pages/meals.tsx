@@ -59,7 +59,7 @@ const Meals: NextPage = () => {
         </Group>
         <Table
           horizontalSpacing="xs"
-          className="w-fit table-fixed overflow-auto"
+          className="w-full table-fixed overflow-auto"
         >
           <colgroup>
             <col className="w-4/6 sm:w-1/2" span={1} />

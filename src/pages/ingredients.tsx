@@ -45,7 +45,7 @@ const Ingredients: NextPage = () => {
           Add ingredient
         </Button>
       </Group>
-      <Table horizontalSpacing="xs" className="w-fit table-fixed overflow-auto">
+      <Table horizontalSpacing="xs" className="w-full table-fixed overflow-auto">
         <colgroup>
           <col className="w-4/6 sm:w-1/2" span={1} />
           <col className="sm:w-1/3" span={1} />
