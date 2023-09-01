@@ -8,7 +8,7 @@ export const mealsRouter = createTRPCRouter({
         .object({
           contains: z.string().optional(),
           filterPlanned: z.boolean().optional(),
-          hasIngredientIds: z.array(z.number()).optional(),
+          hasIngredientIds: z.array(z.string()).optional(),
         })
         .optional()
     )
@@ -58,7 +58,7 @@ export const mealsRouter = createTRPCRouter({
       });
     }),
   delete: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .mutation(({ ctx, input: { id } }) => {
       return ctx.prisma.meal.delete({
         where: {
@@ -69,7 +69,7 @@ export const mealsRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.string(),
         name: z.string().optional(),
         servings: z.number().nonnegative().optional(),
         location: z.string().optional(),

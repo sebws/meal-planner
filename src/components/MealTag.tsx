@@ -1,4 +1,4 @@
-import { Badge, Text } from "@mantine/core";
+import { Badge } from "@mantine/core";
 
 interface IMealTag {
   meal: {

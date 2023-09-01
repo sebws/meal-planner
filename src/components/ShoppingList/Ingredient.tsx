@@ -5,14 +5,14 @@ import { useState } from "react";
 
 interface IIngredient {
   entry: {
-    id: number;
+    id: string;
     qty: number;
     name: string;
     unit: string;
     category: string;
     meals: {
       name: string;
-      id: number;
+      id: string;
     }[];
   };
 }

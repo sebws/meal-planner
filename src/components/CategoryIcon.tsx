@@ -23,7 +23,7 @@ type Category =
   | "fridge";
 
 interface ICategoryIcon {
-  category: Category | string;
+  category: Category | (string & Record<never, never>);
 }
 
 const CategoryIcon: React.FC<ICategoryIcon> = ({ category }) => {

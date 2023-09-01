@@ -39,10 +39,10 @@ export const planRouter = createTRPCRouter({
       Meal[]
     >`select * from "RandomMeals"`;
     return Promise.all(
-      meals.map((m, id) => {
+      meals.map((m) => {
         return ctx.prisma.plan.updateMany({
           where: {
-            id,
+            id: m.id,
             locked: false,
           },
           data: {
@@ -55,8 +55,8 @@ export const planRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
-        meal_id: z.number().optional(),
+        id: z.string(),
+        meal_id: z.string().optional(),
         serves: z.number().optional(),
         name: z.string().optional(),
         servings: z.number().optional(),

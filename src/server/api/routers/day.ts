@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const dayRouter = createTRPCRouter({
   hasRecipe: publicProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .query(({ ctx, input: { id } }) => {
       return (
         ctx.prisma.material.findFirst({

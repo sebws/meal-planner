@@ -33,7 +33,7 @@ export const ingredientsRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.string(),
         name: z.string().optional(),
         category: z.string().optional(),
       })
@@ -50,7 +50,7 @@ export const ingredientsRouter = createTRPCRouter({
       });
     }),
   delete: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .mutation(({ ctx, input: { id } }) => {
       return ctx.prisma.ingredient.delete({
         where: {

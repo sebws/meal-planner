@@ -13,7 +13,7 @@ import {
   type SelectItem,
   TextInput,
 } from "@mantine/core";
-import { useForm, type UseFormReturnType, zodResolver } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { type Ingredient, type Unit } from "@prisma/client";
 import { IconTrash } from "@tabler/icons-react";
@@ -38,11 +38,11 @@ const newUnit = {
 };
 
 const existingName = {
-  ingredientId: z.coerce.number().nonnegative().int(),
+  ingredientId: z.string(),
 };
 
 const existingUnit = {
-  unitId: z.coerce.number().nonnegative().int(),
+  unitId: z.string(),
 };
 
 const IngredientType = {

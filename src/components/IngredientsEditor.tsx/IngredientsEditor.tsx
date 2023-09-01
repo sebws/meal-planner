@@ -9,7 +9,7 @@ import { toTitleCase } from "~/utils/content";
 import { IngredientField } from "../MealAdder/MealAdder";
 
 interface IIngredientsEditor {
-  id: number;
+  id: string;
 }
 
 const IngredientsEditor: React.FC<IIngredientsEditor> = ({ id }) => {
@@ -61,7 +61,7 @@ const IngredientsEditorForm: React.FC<IIngredientsEditorForm> = ({
           key: randomBytes(4).toString("hex"),
           name: String(material.ingredient.id),
           qty: Number(material.qty),
-          unit: String(material.unit.id),
+          unit: material.unit.id,
           category: material.ingredient.category,
         })) || [],
     },

@@ -1,8 +1,5 @@
-import { Text, List, Flex, Collapse, Tooltip } from "@mantine/core";
-import { useState } from "react";
 import { api, type RouterOutputs } from "~/utils/api";
 import { groupBy } from "~/utils/helper";
-import CategoryIcon from "../CategoryIcon";
 import ShoppingCategory from "./ShoppingCategory";
 
 const ShoppingList = () => {
@@ -64,12 +61,12 @@ const plansToShoppingList = (plans: RouterOutputs["plan"]["get"]) =>
         },
         {} as {
           [key: string]: {
-            id: number;
+            id: string;
             qty: number;
             name: string;
             unit: string;
             category: string;
-            meals: { name: string; id: number }[];
+            meals: { name: string; id: string }[];
           };
         }
       )

@@ -8,14 +8,14 @@ import Ingredient from "./Ingredient";
 interface IShoppingCategory {
   category: string;
   values: {
-    id: number;
+    id: string;
     qty: number;
     name: string;
     unit: string;
     category: string;
     meals: {
       name: string;
-      id: number;
+      id: string;
     }[];
   }[];
 }

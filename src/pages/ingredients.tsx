@@ -10,7 +10,6 @@ import {
 import { useDebouncedState, useDisclosure } from "@mantine/hooks";
 import { api, type RouterOutputs } from "~/utils/api";
 import { type NextPage } from "next";
-import meals from "./meals";
 import { minimalInputStyle } from "~/utils/helper";
 import { useState } from "react";
 import { IconTrash } from "@tabler/icons-react";

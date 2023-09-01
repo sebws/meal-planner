@@ -1,10 +1,9 @@
-import { Select, Text, Button, Card, Tooltip, Popover } from "@mantine/core";
+import { Select, Text, Button, Popover } from "@mantine/core";
 import { type Meal, type Plan } from "@prisma/client";
 import {
   IconArrowDown,
   IconArrowUp,
   IconCurrentLocation,
-  IconNotes,
 } from "@tabler/icons-react";
 import { type RouterOutputs, type api } from "~/utils/api";
 import { numberToServings } from "~/utils/content";
@@ -12,7 +11,7 @@ import { minimalInputStyle } from "~/utils/helper";
 import LinkOrText from "../LinkOrText";
 
 interface ITimelineDay {
-  meals: { label: string; value: number }[] | undefined;
+  meals: { label: string; value: string }[] | undefined;
   day: RouterOutputs["plan"]["get"][number];
   update: ReturnType<typeof api.plan.update.useMutation>;
   plan: (Plan & { meal: Meal })[];
@@ -31,9 +30,9 @@ const TimelineDay: React.FC<ITimelineDay> = ({ meals, day, update, plan }) => (
         })) || []
       }
       searchable
-      value={String(day.meal_id)}
+      value={day.meal_id}
       onChange={(selection) => {
-        update.mutate({ id: day.id, meal_id: Number(selection) });
+        update.mutate({ id: day.id, meal_id: selection ?? undefined });
       }}
       styles={minimalInputStyle}
     />
