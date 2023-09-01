@@ -54,7 +54,7 @@ model VerificationToken {
 }
 
 model Ingredient {
-  id        Int        @id @default(autoincrement())
+  id        String     @id @default(dbgenerated("uuid_generate_v4()"))
   name      String
   category  String
   materials Material[]
@@ -63,7 +63,7 @@ model Ingredient {
 }
 
 model Meal {
-  id        Int        @id @default(autoincrement())
+  id        String     @id @default(dbgenerated("uuid_generate_v4()"))
   name      String
   location  String
   servings  Int
@@ -74,30 +74,38 @@ model Meal {
 }
 
 model Plan {
-  id      Int     @id @default(autoincrement())
-  meal_id Int
+  id      String  @id @default(dbgenerated("uuid_generate_v4()"))
+  meal_id String
   serves  Int
   locked  Boolean
   meal    Meal    @relation(fields: [meal_id], references: [id], onDelete: Cascade)
 }
 
 model Material {
-  id            Int        @id @default(autoincrement())
-  meal_id       Int
-  ingredient_id Int
-  unit_id       Int
+  id            String     @id @default(dbgenerated("uuid_generate_v4()"))
+  meal_id       String
+  ingredient_id String
+  unit_id       String
   qty           Float
-  unit          Unit       @relation(fields: [unit_id], references: [id], onDelete: Cascade)
   ingredient    Ingredient @relation(fields: [ingredient_id], references: [id], onDelete: Cascade)
   meal          Meal       @relation(fields: [meal_id], references: [id], onDelete: Cascade)
+  unit          Unit       @relation(fields: [unit_id], references: [id], onDelete: Cascade)
 
   @@map("Materials")
 }
 
 model Unit {
-  id       Int        @id @default(autoincrement())
+  id       String     @id @default(dbgenerated("uuid_generate_v4()"))
   name     String
   material Material[]
 
   @@map("Units")
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view RandomMeals {
+  id       String  @unique
+  name     String?
+  location String?
+  servings Int?
 }

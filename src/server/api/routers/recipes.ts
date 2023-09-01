@@ -13,22 +13,22 @@ const zodNewIngredientWithNewUnit = z.object({
 const zodNewIngredient = z.object({
   type: z.literal("10"),
   name: z.string(),
-  unit_id: z.coerce.number(),
+  unit_id: z.string(),
   qty: z.number(),
   category: z.string(),
 });
 
 const zodExistingIngredientWithNewUnit = z.object({
   type: z.literal("01"),
-  ingredient_id: z.coerce.number(),
+  ingredient_id: z.string(),
   unit: z.string(),
   qty: z.number(),
 });
 
 const zodExistingIngredient = z.object({
   type: z.literal("00"),
-  ingredient_id: z.coerce.number(),
-  unit_id: z.coerce.number(),
+  ingredient_id: z.string(),
+  unit_id: z.string(),
   qty: z.number(),
 });
 

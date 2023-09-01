@@ -1,9 +1,6 @@
-import { type Meal, type Plan } from "@prisma/client";
-import { Timeline, Text, Stack, Button, Flex } from "@mantine/core";
+import { Timeline, Text, Button, Flex } from "@mantine/core";
 import { numberToDay } from "~/utils/content";
-import TimelineBullet from "./TimelineBullet";
-import { api, RouterOutputs } from "~/utils/api";
-import TimelineDay from "./TimelineDay";
+import { api } from "~/utils/api";
 import { IconArrowsShuffle, IconLock, IconLockOpen } from "@tabler/icons-react";
 import { Suspense } from "react";
 import ActualTimeline from "./ActualTimeline";
