@@ -50,7 +50,7 @@ type Ingredient = z.infer<typeof ingredientTypes>;
 
 export const recipesRouter = createTRPCRouter({
   get: publicProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .query(({ ctx, input: { id } }) => {
       return ctx.prisma.meal.findFirst({
         include: {
