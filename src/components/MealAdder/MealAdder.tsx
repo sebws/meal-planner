@@ -231,6 +231,7 @@ export const MealAdder: React.FC<IMealAdder> = ({ onClose }) => {
 };
 
 interface IIngredientField {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
   index: number;
   ingredients: SelectItem[];
@@ -252,7 +253,7 @@ export const IngredientField: React.FC<IIngredientField> = ({
   categories,
   defaultValues,
 }) => {
-  const [showCategory, { open: show, close: hide }] = useDisclosure(false);
+  const [showCategory, { open: show }] = useDisclosure(false);
   const [newIngredient, setNewIngredient] = useState<SelectItem[]>([]);
   const [newUnit, setNewUnit] = useState<SelectItem[]>([]);
   const [newCategory, setNewCategory] = useState<SelectItem[]>([]);
