@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import { type Meal } from "@prisma/client";
 import { publicProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
@@ -35,21 +34,19 @@ export const planRouter = createTRPCRouter({
     });
   }),
   randomise: publicProcedure.mutation(async ({ ctx }) => {
-    const meals = await ctx.prisma.$queryRaw<
-      Meal[]
-    >`select * from "RandomMeals"`;
-    return Promise.all(
-      meals.map((m) => {
-        return ctx.prisma.plan.updateMany({
+    const meals = await ctx.prisma.randomMeals.findMany();
+    return ctx.prisma.$transaction(
+      (await ctx.prisma.plan.findMany()).map((plan) =>
+        ctx.prisma.plan.updateMany({
           where: {
-            id: m.id,
-            locked: false,
+            id: plan.id,
+            locked: false
           },
           data: {
-            meal_id: m.id,
+            meal_id: meals.pop()!.id,
           },
-        });
-      })
+        })
+      )
     );
   }),
   update: protectedProcedure
