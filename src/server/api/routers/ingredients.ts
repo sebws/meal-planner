@@ -20,7 +20,6 @@ export const ingredientsRouter = createTRPCRouter({
         },
         distinct: ["name"],
       });
-      // TODO: FIX THINGS EXPECTING VALUE:LABEL
     }),
   categories: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.ingredient.findMany({

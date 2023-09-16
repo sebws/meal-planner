@@ -19,13 +19,15 @@ const Ingredients: NextPage = () => {
   const { data: ingredientsData } = api.ingredients.get.useQuery();
   const [search, setSearch] = useDebouncedState("", 300);
 
-  const ingredients = search
-    ? ingredientsData?.filter(
-        (ingredient) =>
-          ingredient.name.toLowerCase().includes(search.toLowerCase()) ||
-          ingredient.category.toLowerCase().includes(search.toLowerCase())
-      )
-    : ingredientsData;
+  const ingredients = (
+    search
+      ? ingredientsData?.filter(
+          (ingredient) =>
+            ingredient.name.toLowerCase().includes(search.toLowerCase()) ||
+            ingredient.category.toLowerCase().includes(search.toLowerCase())
+        )
+      : ingredientsData
+  )?.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <Stack>
@@ -44,7 +46,10 @@ const Ingredients: NextPage = () => {
           Add ingredient
         </Button>
       </Group>
-      <Table horizontalSpacing="xs" className="w-full table-fixed overflow-auto">
+      <Table
+        horizontalSpacing="xs"
+        className="w-full table-fixed overflow-auto"
+      >
         <colgroup>
           <col className="w-4/6 sm:w-1/2" span={1} />
           <col className="sm:w-1/3" span={1} />
