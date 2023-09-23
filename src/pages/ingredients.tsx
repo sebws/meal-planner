@@ -14,6 +14,28 @@ import { minimalInputStyle } from "~/utils/helper";
 import { useState } from "react";
 import { IconTrash } from "@tabler/icons-react";
 import ConfirmModal from "~/components/ConfirmModal/ConfirmModal";
+import superjson from "superjson";
+import { createServerSideHelpers } from "@trpc/react-query/server";
+import { appRouter } from "~/server/api/root";
+import { createInnerTRPCContext } from "~/server/api/trpc";
+
+export const getServerSideProps = async () => {
+  const helpers = createServerSideHelpers({
+    router: appRouter,
+    ctx: createInnerTRPCContext({
+      session: null,
+    }),
+    transformer: superjson,
+  });
+
+  await helpers.ingredients.get.prefetch();
+
+  return {
+    props: {
+      trpcState: helpers.dehydrate(),
+    },
+  };
+};
 
 const Ingredients: NextPage = () => {
   const { data: ingredientsData } = api.ingredients.get.useQuery();

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useLocalStorage } from "@mantine/hooks";
 import {
@@ -83,7 +83,7 @@ const SessionButton: React.FC = () => {
 const ColorSchemeToggle: React.FC = () => {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "color-scheme",
-    defaultValue: "light",
+    defaultValue: "dark",
   });
 
   const toggleColorScheme = () =>

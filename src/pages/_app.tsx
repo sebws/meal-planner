@@ -17,7 +17,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   const [colorScheme] = useLocalStorage<ColorScheme>({
     key: "color-scheme",
-    defaultValue: "light",
+    defaultValue: "dark",
   });
 
   return (
