@@ -1,7 +1,7 @@
-import { Center, type SelectItem } from "@mantine/core";
+import { ActionIcon, Center, type SelectItem } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { type Ingredient, type Unit } from "@prisma/client";
-import { IconRotateClockwise2 } from "@tabler/icons-react";
+import { IconRotateClockwise2, IconPlus } from "@tabler/icons-react";
 import { randomBytes } from "crypto";
 import React from "react";
 import { api, type RouterOutputs } from "~/utils/api";
@@ -90,9 +90,19 @@ const IngredientsEditorForm: React.FC<IIngredientsEditorForm> = ({
             categories={categories}
           />
         ))}
+      <ActionIcon
+        onClick={() => form.insertListItem("ingredients", EMPTY_INGREDIENT())}
+      >
+        <IconPlus />
+      </ActionIcon>
     </form>
   );
 };
+
+const EMPTY_INGREDIENT = () => ({
+  key: randomBytes(4).toString("hex"),
+  type: "00",
+});
 
 export default IngredientsEditor;
 
