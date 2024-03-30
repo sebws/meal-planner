@@ -179,8 +179,10 @@ export const MealAdder: React.FC<IMealAdder> = ({ onClose }) => {
   return (
     <form
       onSubmit={form.onSubmit((values) => {
-        onClose();
-        return submit.mutate(values);
+        return submit.mutate(values, {
+          onSuccess: onClose,
+          onError: (data) => console.dir({ values, data }),
+        });
       })}
     >
       <TextInput
