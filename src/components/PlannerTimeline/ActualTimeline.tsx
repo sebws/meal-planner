@@ -1,4 +1,5 @@
 import { Timeline, Text } from "@mantine/core";
+import { useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { numberToDay } from "~/utils/content";
 import TimelineBullet from "./TimelineBullet";
@@ -6,6 +7,7 @@ import TimelineDay from "./TimelineDay";
 
 const ActualTimeline: React.FC = () => {
   const utils = api.useContext();
+  const session = useSession();
 
   const { data: plan } = api.plan.get.useQuery();
   const { data: meals } = api.meals.get.useQuery(undefined, {
@@ -21,6 +23,7 @@ const ActualTimeline: React.FC = () => {
       void utils.plan.get.invalidate();
     },
     onMutate: async (data) => {
+      if (session.status !== "authenticated") return;
       await utils.plan.get.cancel();
       const prevData = utils.plan.get.getData();
       utils.plan.get.setData(undefined, (old) =>

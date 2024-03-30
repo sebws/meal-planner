@@ -18,6 +18,7 @@ import superjson from "superjson";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import { appRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
+import { useSession } from "next-auth/react";
 
 export const getServerSideProps = async () => {
   const helpers = createServerSideHelpers({
@@ -102,6 +103,7 @@ const Ingredient = ({
   ingredient: RouterOutputs["ingredients"]["get"][number];
 }) => {
   const utils = api.useContext();
+  const session = useSession();
 
   const [
     confirmDeleteOpened,
@@ -111,6 +113,7 @@ const Ingredient = ({
   const update = api.ingredients.update.useMutation({
     onSettled: () => utils.ingredients.get.invalidate(),
     onMutate: async (data) => {
+      if (session.status !== "authenticated") return;
       await utils.ingredients.get.cancel();
       const prevData = utils.ingredients.get.getData();
       utils.ingredients.get.setData(undefined, (old) =>

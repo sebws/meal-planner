@@ -13,6 +13,7 @@ import {
 import { useDebouncedState, useDisclosure } from "@mantine/hooks";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { type NextPage } from "next";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import ConfirmModal from "~/components/ConfirmModal/ConfirmModal";
 import IngredientsEditor from "~/components/IngredientsEditor.tsx/IngredientsEditor";
@@ -39,7 +40,7 @@ const Meals: NextPage = () => {
   return (
     <>
       <Modal size={"xl"} centered opened={opened} onClose={close}>
-        <MealAdder onClose={close}/>
+        <MealAdder onClose={close} />
       </Modal>
       <Stack>
         <Group>
@@ -92,10 +93,12 @@ interface IMeal {
 
 const Meal: React.FC<IMeal> = ({ meal }) => {
   const utils = api.useContext();
+  const session = useSession();
 
   const update = api.meals.update.useMutation({
     onSettled: () => utils.meals.get.invalidate(),
     onMutate: async (data) => {
+      if (session.status !== "authenticated") return;
       await utils.meals.get.cancel();
       const prevData = utils.meals.get.getData();
       utils.meals.get.setData(undefined, (old) =>

@@ -4,13 +4,16 @@ import { api } from "~/utils/api";
 import { IconArrowsShuffle, IconLock, IconLockOpen } from "@tabler/icons-react";
 import { Suspense } from "react";
 import ActualTimeline from "./ActualTimeline";
+import { useSession } from "next-auth/react";
 
 export const PlannerTimeline: React.FC = () => {
   const utils = api.useContext();
+  const session = useSession();
 
   const lock = api.plan.lock.useMutation({
     onSettled: () => utils.plan.get.invalidate(),
     onMutate: async () => {
+      if (session.status !== 'authenticated') return;
       await utils.plan.get.cancel();
       const prevData = utils.plan.get.getData();
       utils.plan.get.setData(undefined, (old) =>
@@ -28,6 +31,7 @@ export const PlannerTimeline: React.FC = () => {
   const unlock = api.plan.unlock.useMutation({
     onSettled: () => utils.plan.get.invalidate(),
     onMutate: async () => {
+      if (session.status !== "authenticated") return;
       await utils.plan.get.cancel();
       const prevData = utils.plan.get.getData();
       utils.plan.get.setData(undefined, (old) =>
