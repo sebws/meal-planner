@@ -25,7 +25,7 @@ import { toTitleCase } from "~/utils/content";
 
 const baseIngredient = {
   key: z.string().nonempty(),
-  qty: z.coerce.number().positive().int(),
+  qty: z.coerce.number().positive(),
 };
 
 const newName = {
